@@ -37,7 +37,7 @@ def connect_to_endpoint(url,f):
             	
             	f.write(new_json_response)
 
-            	print(new_json_response)
+            	#print(new_json_response)
             	
             	
     if response.status_code != 200:
