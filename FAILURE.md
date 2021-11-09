@@ -1,5 +1,5 @@
 1. Twitter authorization failure. 
-Problem: It came up with 401 in I first run of my code. 
+Problem: It came up with 403 in I first run of my code. 
 Solve method: Export ‘BEARER_TOKEN’ = ‘<your_bearer_token>’ in my terminal and run.
 Resource: https://github.com/twitterdev/Twitter-API-v2-sample-code/blob/main/Tweet-Lookup/get_tweets_with_bearer_token.py
 
