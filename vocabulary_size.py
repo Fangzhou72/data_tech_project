@@ -1,5 +1,5 @@
 dict = {}
-with open('/Users/lusang/Desktop/tweets.txt','r') as file:
+with open('tweets.txt','r') as file:
     lines = file.readlines()
     for line in lines:
         words = line.split()
