@@ -2,7 +2,6 @@ import requests
 import os
 import json
 import time
-import sys
 import spacy
 import re
 
@@ -50,22 +49,18 @@ def bearer_oauth(r):
 def connect_to_endpoint(url,f):
     response = requests.request("GET", url, auth=bearer_oauth, stream=True)
     print(response.status_code)
-    old_tt = '1111-11-11-11-11-11'
     for response_line in response.iter_lines():
         if response_line:
             json_response = json.loads(response_line)
             if json_response["data"]["lang"] == "en":
             	json_response["data"]["created_at"] = time.strftime("%Y-%m-%d-%H-%M-%S", time.strptime(json_response["data"]["created_at"][:19], "%Y-%m-%dT%H:%M:%S"))
             	json_response["data"]["text"] = clean_text(json_response["data"]["text"])
-            	new_json_response = json_response["data"]["created_at"]+","+json_response["data"]["text"]+"\n"
+            	new_json_response = json_response["data"]["created_at"]+"    "+json_response["data"]["text"]+"\n"
             	#from: https://stackoverflow.com/questions/214777/how-do-you-convert-yyyy-mm-ddthhmmss-000z-time-format-to-mm-dd-yyyy-time-forma/215313
             	
-            	new_tt = json_response["data"]["created_at"]
             	f.write(new_json_response)
-            	if new_tt > old_tt:
-            	 print(new_tt)
-            	 old_tt = new_tt
-            	#print(new_json_response)
+
+            	print(new_json_response)
             	
             	
     if response.status_code != 200:
@@ -83,29 +78,7 @@ def main():
     while True:
         connect_to_endpoint(url,f)
         timeout += 1
-   
-
-def read_jsonfile():
-    with open(sys.argv[1], 'r') as fjson:
-      contents = fjson.read()
-      f = open('tweets.txt','w')
-      f.write(contents)
-      #From: https://stackoverflow.com/questions/7439145/i-want-to-read-in-a-file-from-the-command-line-in-python/7439162?fbclid=IwAR3kjvB_uua5NZo1qiSEWSqXYAMgG7a3Y2ynbe14o2Js2JKaps49pA_fTqM
-
     
 
 if __name__ == "__main__":
-    if len(sys.argv) != 1:
-     read_jsonfile()
-    else:
-     main()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
+    main()
