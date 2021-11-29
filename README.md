@@ -14,12 +14,12 @@ If it shows 200 and starts to print Datetime, then we successfully execute the f
 
 3. Run the server.py file with json file
 Enter the following line to open the file:
-python server.py <your_jsonfile >
+python server.py --filename <your_jsonfile>
 
 For example:
-python server.py test.json
+python server.py --filename test.json
 
-By doing so, the python file will copy the content in json file to tweets.txt.
+By doing so, the python file will read the content in json file and write on tweets.txt.
 
 Part B
 
