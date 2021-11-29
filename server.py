@@ -5,6 +5,7 @@ import time
 import sys
 import spacy
 import re
+import argparse
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
@@ -84,23 +85,29 @@ def main():
         connect_to_endpoint(url,f)
         timeout += 1
    
+   
+def tweets_or_jsonfile():
+    parser = argparse.ArgumentParser(description='filename')
+    parser.add_argument('--filename', type=str, default='no file then read from twitter API', help='Enter a Json file name or enter nothing to read from twitter API')
+    args = parser.parse_args() 
+    if args.filename == 'no file then read from twitter API':
+     main()  
+    else:
+     with open(args.filename, 'r') as fjson:
+      f = open('tweets.txt','w') 
+      data_line = []
+      for line in fjson:
+       data_line.append(json.loads(line))
 
-def read_jsonfile():
-    with open(sys.argv[1], 'r') as fjson:
-      contents = fjson.read()
-      f = open('tweets.txt','w')
-      f.write(contents)
-      #From: https://stackoverflow.com/questions/7439145/i-want-to-read-in-a-file-from-the-command-line-in-python/7439162?fbclid=IwAR3kjvB_uua5NZo1qiSEWSqXYAMgG7a3Y2ynbe14o2Js2JKaps49pA_fTqM
-
-    
+      for i in range(len(data_line)):
+       zcontent = data_line[i]['data']['created_at'] +','+ data_line[i]['data']['text']
+       #print(zcontent)
+       f.write(zcontent)
+       f.write('\n')
+       
 
 if __name__ == "__main__":
-    if len(sys.argv) != 1:
-     read_jsonfile()
-    else:
-     main()
-    
-    
+    tweets_or_jsonfile()
     
     
     
