@@ -46,22 +46,22 @@ It will print out a number indicating the number of unique words in tweets.txt
 
 
 Milestone 2
-# Create PostgreSQL tables
+Create PostgreSQL tables
 Run the command in your terminal: `psql`
 Then run the SQL command: `create database twitter;`
 Then run the terminal: `psql twitter < schema_postgres.sql`
 
-# Read tweets and load into database
+Read tweets and load into database
 Run the Python code in your terminal to read from twitter API: `python server_postgres.py`
 Run the Python code in your terminal to read from json file: `python server_postgres.py -- filename <json_file_name>`
 
-# Compute the frequency of words in the current minute
+Compute the frequency of words in the current minute
 Run the Python code in your terminal: `python word_count_postgres.py`
 
-# Compute the number of unique words in the current minute
+Compute the number of unique words in the current minute
 Run the Python code in your terminal: `python vocabulary_size_postgres.py`
 
-# Compute the trendiness score
+Compute the trendiness score
 Run the Python code in your terminal: `python trendiness_postgres.py`
 
 
