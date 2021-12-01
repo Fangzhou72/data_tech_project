@@ -8,8 +8,8 @@ CREATE TABLE WORD_STREAM (
 );
 
 CREATE TABLE WORD_TRENDINESS (
-  stream_id SERIAL PRIMARY KEY, 
-  word varchar(255) NOT NULL, 
-  trendiness float
+  word varchar(255) NOT NULL UNIQUE, 
+  trendiness float,
+  time varchar(100)
 );
 
