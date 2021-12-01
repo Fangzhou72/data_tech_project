@@ -66,6 +66,28 @@ Run the Python code in your terminal: `python trendiness_postgres.py`
 
 
 
+Milestone 3
+Install the Kafka and kafka-python (pip install kafka-python)
+
+All Kafka related files should store in the "kafka" folder
+
+
+First we need to create a "topic"
+
+Move to kafka folder: cd kafka
+Run the following code in your terminal: ~/kafka/bin/kafka-topics.sh --create --topic final_project --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+Next run the consumer.py file: python consumer.py
+
+Then open another terminal:
+Run the Python code in your terminal to read from twitter API: python server_to_kafka.py (There will be a weird bug storing duplicate data in kafka, professor will help us?)
+Run the Python code in your terminal to read from json file: python server_to_kafka.py –filename <json_filename>  Ex: python server_to_kafka.py –filename test.json
+
+Check the kafka:
+~/kafka/bin/kafka-console-consumer.sh --topic final_project --bootstrap-server localhost:9092 --from-beginning
+or 
+use the server_from_kafka.py file (I only finished the read from kafka part but not the calculate trendiness part):
+python server_from_kafka.py
 
 
 
