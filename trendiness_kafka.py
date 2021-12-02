@@ -28,8 +28,8 @@ parser.add_argument("word")
 args = parser.parse_args()
 targetWord = args.word
 while True:
- time.sleep(60)
- #time.sleep(1) For testing!
+ #time.sleep(60)
+ time.sleep(1) #For testing!
  load_in(targetWord)
 
 
