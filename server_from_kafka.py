@@ -170,6 +170,7 @@ if __name__ == "__main__":
 	  count += 1
 	 else:
 	  curr_kafka_t = message[6][10:29]
+	  #print(curr_kafka_t)
 	  curr_kafka_time = datetime.datetime.strptime(curr_kafka_t, "%Y-%m-%d-%H-%M-%S")-datetime.timedelta(minutes=1, seconds =1)
 	 
 	 
