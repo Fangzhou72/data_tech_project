@@ -61,7 +61,7 @@ def connect_to_endpoint(url, producer, kafka_data_t):
     for response_line in response.iter_lines():
         if response_line:
             json_response = json.loads(response_line)
-            print(json_response)
+            #print(json_response)
             if json_response["data"]["lang"] == "en":
             	json_response["data"]["created_at"] = time.strftime("%Y-%m-%d-%H-%M-%S", time.strptime(json_response["data"]["created_at"][:19], "%Y-%m-%dT%H:%M:%S"))
             	json_response["data"]["text"] = clean_text(json_response["data"]["text"])
@@ -73,7 +73,7 @@ def connect_to_endpoint(url, producer, kafka_data_t):
             	 print(new_tt)
             	 old_tt = new_tt
             	#print(new_json_response)
-            	
+            	#time.sleep(3)
             	kafka_data_t = {'date' : json_response["data"]["created_at"],'text': json_response["data"]['text']}
        	producer.send('final_project', value=kafka_data_t)
        	producer.flush()
@@ -91,7 +91,7 @@ def connect_to_endpoint(url, producer, kafka_data_t):
 def main():
     url = create_url()
     timeout = 0
-    kafka_data_t = ""
+    kafka_data_t = "1111-11-11-11-11-11"
     while True:
         connect_to_endpoint(url, producer, kafka_data_t)
         timeout += 1
