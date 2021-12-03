@@ -162,7 +162,7 @@ if __name__ == "__main__":
 
 	count = 0
 	f = open('tweets.txt','w')
-	curr_kafka_time = datetime.datetime.strptime("1111-11-11-11-11-11", "%Y-%m-%d-%H-%M-%S")
+	curr_kafka_time = datetime.datetime.strptime("1211-11-11-11-11-11", "%Y-%m-%d-%H-%M-%S")
 	for message in consumer:
 	 if count == 0:
 	  first_kafka_t = message[6][10:29]
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 	  count += 1
 	 else:
 	  curr_kafka_t = message[6][10:29]
-	  #print(curr_kafka_t)
+	  print(curr_kafka_t)
 	  curr_kafka_time = datetime.datetime.strptime(curr_kafka_t, "%Y-%m-%d-%H-%M-%S")-datetime.timedelta(minutes=1, seconds =1)
 	 
 	 
@@ -186,4 +186,3 @@ if __name__ == "__main__":
 	  f = open('tweets.txt','a')
 
 	sys.exit()
-
