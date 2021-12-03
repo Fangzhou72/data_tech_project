@@ -54,7 +54,7 @@ def bearer_oauth(r):
     return r
 
 
-def connect_to_endpoint(url, producer, kafka_data_t):
+def connect_to_endpoint(url, producer):
     response = requests.request("GET", url, auth=bearer_oauth, stream=True)
     print(response.status_code)
     old_tt = '1111-11-11-11-11-11'
@@ -76,7 +76,7 @@ def connect_to_endpoint(url, producer, kafka_data_t):
             	#time.sleep(3)
             	kafka_data_t = {'date' : json_response["data"]["created_at"],'text': json_response["data"]['text']}
        	producer.send('final_project', value=kafka_data_t)
-       	producer.flush()
+       	#producer.flush()
             	
         
             	
@@ -91,9 +91,9 @@ def connect_to_endpoint(url, producer, kafka_data_t):
 def main():
     url = create_url()
     timeout = 0
-    kafka_data_t = "1111-11-11-11-11-11"
+    kafka_data_t = {'date' : "1111-11-11-11-11-11",'text': "test"}
     while True:
-        connect_to_endpoint(url, producer, kafka_data_t)
+        connect_to_endpoint(url, producer)
         timeout += 1
    
    
@@ -120,11 +120,3 @@ def tweets_or_jsonfile():
 
 if __name__ == "__main__":
     tweets_or_jsonfile()
-    
-    
-    
-    
-    
-    
-    
-
