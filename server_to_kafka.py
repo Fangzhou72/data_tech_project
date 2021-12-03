@@ -6,6 +6,7 @@ import sys
 import spacy
 import re
 import argparse
+import datetime
 from json import dumps
 from kafka import KafkaProducer
 
@@ -54,7 +55,7 @@ def bearer_oauth(r):
     return r
 
 
-def connect_to_endpoint(url, producer):
+def connect_to_endpoint(url, producer, kafka_data_t):
     response = requests.request("GET", url, auth=bearer_oauth, stream=True)
     print(response.status_code)
     old_tt = '1111-11-11-11-11-11'
@@ -76,7 +77,7 @@ def connect_to_endpoint(url, producer):
             	#time.sleep(3)
             	kafka_data_t = {'date' : json_response["data"]["created_at"],'text': json_response["data"]['text']}
        	producer.send('final_project', value=kafka_data_t)
-       	#producer.flush()
+       	producer.flush()
             	
         
             	
@@ -91,9 +92,12 @@ def connect_to_endpoint(url, producer):
 def main():
     url = create_url()
     timeout = 0
-    kafka_data_t = {'date' : "1111-11-11-11-11-11",'text': "test"}
+    now = str(datetime.datetime.now(datetime.timezone.utc))
+    nn = time.strftime("%Y-%m-%d-%H-%M-%S", time.strptime(now[:19], "%Y-%m-%d %H:%M:%S"))
+    #print(nn)
+    kafka_data_t = {'date' : nn,'text': "test"}
     while True:
-        connect_to_endpoint(url, producer)
+        connect_to_endpoint(url, producer, kafka_data_t)
         timeout += 1
    
    
