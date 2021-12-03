@@ -9,8 +9,8 @@ Solve method: Using the function ‘strftime’ and’ strptime’ in the Python
 Resource: https://stackoverflow.com/questions/214777/how-do-you-convert-yyyy-mm-ddthhmmss-000z-time-format-to-mm-dd-yyyy-time-forma/215313
 
 3. Read JSON file failure.
-Problem: Fail to read a JSON file using my terminal.
-Solve method: Using ‘sys’ library to connect JSON file and Python file. (sys.argv)
-Resource: https://stackoverflow.com/questions/7439145/i-want-to-read-in-a-file-from-the-command-line-in-python/7439162?fbclid=IwAR3kjvB_uua5NZo1qiSEWSqXYAMgG7a3Y2ynbe14o2Js2JKaps49pA_fTqM
+Problem: Fail to read a JSON file line by line.
+Solve method: Create a list to store the content.
+Resource: https://stackoverflow.com/questions/12451431/loading-and-parsing-a-json-file-with-multiple-json-objects
 
 

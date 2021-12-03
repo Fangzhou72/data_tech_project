@@ -6,10 +6,16 @@ import sys
 import spacy
 import re
 import argparse
+from json import dumps
+from kafka import KafkaProducer
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
 bearer_token = os.environ.get("BEARER_TOKEN")
+
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+                         value_serializer=lambda x:  
+                         dumps(x).encode('utf-8'))
 
 nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
 
@@ -48,26 +54,31 @@ def bearer_oauth(r):
     return r
 
 
-def connect_to_endpoint(url,f):
+def connect_to_endpoint(url, producer, kafka_data_t):
     response = requests.request("GET", url, auth=bearer_oauth, stream=True)
     print(response.status_code)
     old_tt = '1111-11-11-11-11-11'
     for response_line in response.iter_lines():
         if response_line:
             json_response = json.loads(response_line)
+            #print(json_response)
             if json_response["data"]["lang"] == "en":
             	json_response["data"]["created_at"] = time.strftime("%Y-%m-%d-%H-%M-%S", time.strptime(json_response["data"]["created_at"][:19], "%Y-%m-%dT%H:%M:%S"))
             	json_response["data"]["text"] = clean_text(json_response["data"]["text"])
             	new_json_response = json_response["data"]["created_at"]+","+json_response["data"]["text"]+"\n"
             	#from: https://stackoverflow.com/questions/214777/how-do-you-convert-yyyy-mm-ddthhmmss-000z-time-format-to-mm-dd-yyyy-time-forma/215313
-            	
+       	
             	new_tt = json_response["data"]["created_at"]
-            	f.write(new_json_response)
             	if new_tt > old_tt:
             	 print(new_tt)
             	 old_tt = new_tt
             	#print(new_json_response)
+            	#time.sleep(3)
+            	kafka_data_t = {'date' : json_response["data"]["created_at"],'text': json_response["data"]['text']}
+       	producer.send('final_project', value=kafka_data_t)
+       	producer.flush()
             	
+        
             	
     if response.status_code != 200:
         raise Exception(
@@ -79,10 +90,10 @@ def connect_to_endpoint(url,f):
 
 def main():
     url = create_url()
-    f = open('tweets.txt','w')
     timeout = 0
+    kafka_data_t = "1111-11-11-11-11-11"
     while True:
-        connect_to_endpoint(url,f)
+        connect_to_endpoint(url, producer, kafka_data_t)
         timeout += 1
    
    
@@ -94,7 +105,6 @@ def tweets_or_jsonfile():
      main()  
     else:
      with open(args.filename, 'r') as fjson:
-      f = open('tweets.txt','w') 
       data_line = []
       for line in fjson:
        data_line.append(json.loads(line))
@@ -102,8 +112,10 @@ def tweets_or_jsonfile():
       for i in range(len(data_line)):
        zcontent = data_line[i]['data']['created_at'] +','+ data_line[i]['data']['text']
        #print(zcontent)
-       f.write(zcontent)
-       f.write('\n')
+       kafka_data = {'date' : data_line[i]['data']['created_at'],'text': data_line[i]['data']['text']}
+       producer.send('final_project', value=kafka_data)
+       producer.flush()
+       
        
 
 if __name__ == "__main__":

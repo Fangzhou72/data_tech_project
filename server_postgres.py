@@ -6,6 +6,7 @@ import sys
 import spacy
 import re
 import argparse
+import psycopg2
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
@@ -60,15 +61,15 @@ def connect_to_endpoint(url,f):
             	json_response["data"]["text"] = clean_text(json_response["data"]["text"])
             	new_json_response = json_response["data"]["created_at"]+","+json_response["data"]["text"]+"\n"
             	#from: https://stackoverflow.com/questions/214777/how-do-you-convert-yyyy-mm-ddthhmmss-000z-time-format-to-mm-dd-yyyy-time-forma/215313
-            	
+
             	new_tt = json_response["data"]["created_at"]
             	f.write(new_json_response)
             	if new_tt > old_tt:
             	 print(new_tt)
             	 old_tt = new_tt
             	#print(new_json_response)
-            	
-            	
+
+
     if response.status_code != 200:
         raise Exception(
             "Request returned an error: {} {}".format(
@@ -84,8 +85,8 @@ def main():
     while True:
         connect_to_endpoint(url,f)
         timeout += 1
-   
-   
+
+
 def tweets_or_jsonfile():
     parser = argparse.ArgumentParser(description='filename')
     parser.add_argument('--filename', type=str, default='no file then read from twitter API', help='Enter a Json file name or enter nothing to read from twitter API')
@@ -104,15 +105,61 @@ def tweets_or_jsonfile():
        #print(zcontent)
        f.write(zcontent)
        f.write('\n')
-       
+
+def readin_file():
+	f = open('tweets.txt','r')
+	lines = f.readlines()
+	f.close()
+	return lines
+
+def split_tweet(testline):
+    pattern_special = re.compile(r'[\#\@\_]+')
+    testline = re.sub(pattern_special, ' ', testline)
+
+    pattern_interval = re.compile(r'[\s\,\;\.]+')
+    test_list = re.split(pattern_interval, testline)
+
+    word_list = []
+    for item in range(len(test_list)):
+        if item > 0 :
+            if test_list[item] != '' :
+                word_list.append([test_list[0], test_list[item]])
+    return word_list
+
+def word_stream(lines):
+    stream = []
+    for line in lines:
+        stream += split_tweet(line)
+    return stream
+
+def load_in(stream):
+	# open a connection (make sure to close it later)
+	conn = psycopg2.connect(user="gb760", dbname = "twitter")
+
+	# create a cursor
+	cur = conn.cursor()
+
+	# execute a SQL command
+	for entry in stream:
+		#print(entry)		
+		cur.execute("""INSERT INTO WORD_STREAM (timestamp, word) VALUES (%s,%s)""", (entry[0], entry[1]))
+		conn.commit()	
+	if conn:            
+		cur.close()
+		conn.close()
+
+
+
+
 
 if __name__ == "__main__":
     tweets_or_jsonfile()
-    
-    
-    
-    
-    
-    
-    
+    lines = readin_file()
+    stream = word_stream(lines)
+    load_in(stream)
+
+
+
+
+
 
