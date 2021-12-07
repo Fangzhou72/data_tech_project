@@ -68,6 +68,15 @@ def connect_to_endpoint(url,f):
             	 print(new_tt)
             	 old_tt = new_tt
             	#print(new_json_response)
+            	
+            	f.close()
+            	lines = readin_file()
+            	#print(lines)
+            	stream = word_stream(lines)
+            	#print(stream)
+            	load_in(stream)
+            	f = open('tweets.txt','w')
+    		
 
 
     if response.status_code != 200:
