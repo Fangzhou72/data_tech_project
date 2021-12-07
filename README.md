@@ -5,7 +5,7 @@ Set your environment in your terminal run the following line:
 export ‘BEARER_TOKEN’ = ‘<your_bearer_token>’
 
 For example: 
-export 'BEARER_TOKEN'='AAAAAAAAAAAAAAAAAAAAAIVpVAEAAAAAm%2BxS5JHZlbgJ40MtHcpG%2FDWG6fA%3DJSDGtviJIu4q69N1OxT7AxGTEfomM7IreXNc5mOoMwAnztcEMd'
+export 'BEARER_TOKEN'='AAAAAAAAAAAAAAAAAAAAAKVkVAEAAAAAUnzDwyYuL6V%2BUB4%2FOc%2BsJBHo%2BL0%3DPy1K9NUa4V3W8KU9vruHBcMwYN8k7gE855Hkpt4J2mDe3i5Ak5'
 
 Run the server.py file 
 Enter the following line to open the file:
